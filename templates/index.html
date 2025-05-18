@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Service</title>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+  <!-- <script src="{{ url_for('static', filename='socket.io.js') }}"></script> -->
+  <script defer src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
+
+<h1>Notification Service - Test Client</h1>
+
+<h2>Get Notifications</h2>
+<form method="GET" onsubmit="event.preventDefault(); fetchNotifications();">
+  <label for="userId">User ID:</label>
+  <input type="number" id="userId" name="userId" required>
+  <button type="submit">Get Notifications</button>
+</form>
+
+<div id="notifications"></div>
+
+<h2>Send Notification</h2>
+<form method="POST" onsubmit="event.preventDefault(); sendNotification();">
+  <label for="userIdSend">User ID:</label>
+  <input type="number" id="userIdSend" name="userIdSend" required><br>
+
+  <label for="type">Notification Type:</label>
+  <select id="type" name="type">
+    <option value="email">Email</option>
+    <option value="sms">SMS</option>
+    <option value="in-app">In-App</option>
+  </select><br>
+
+  <label for="content">Content:</label>
+  <input type="text" id="content" name="content" required><br>
+
+  <button type="submit">Send Notification</button>
+</form>
+
+<script>
+  async function fetchNotifications() {
+    const userId = document.getElementById('userId').value;
+    try {
+      const response = await fetch(`/users/${userId}/notifications`);
+      const data = await response.json();
+      const notificationsDiv = document.getElementById('notifications');
+      notificationsDiv.innerHTML = `<h3>Notifications for User ${userId}:</h3>`;
+      if (data.data) {
+        data.data.forEach(notif => {
+          notificationsDiv.innerHTML += `<p>${notif.content} - Status: ${notif.status}</p>`;
+        });
+      } else {
+        notificationsDiv.innerHTML += `<p>No notifications found.</p>`;
+      }
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  }
+
+  async function sendNotification() {
+    const userId = document.getElementById('userIdSend').value;
+    const type = document.getElementById('type').value;
+    const content = document.getElementById('content').value;
+
+    try {
+      const response = await fetch('/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: Number(userId),
+          notification_type: type,
+          content: content
+        })
+      });
+      const result = await response.json();
+      console.log('Notification sent:', result);
+    } catch (err) {
+      console.error('Error sending notification:', err);
+    }
+  }
+</script>
+
+</body>
+</html>
