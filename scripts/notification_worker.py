@@ -39,7 +39,7 @@ def send_email_notification(notification):
             "to": REGISTERED_RECEIVER_EMAIL,
             "subject": "e-mail notification demo.",
             "text": message,
-            "o:tag": "Python test",
+            "o:tag": "Demo email",
         }
 
         # send email
@@ -51,7 +51,7 @@ def send_email_notification(notification):
             {"$set": {"status": "sent", "timestamp": datetime.now()}}
         )
         print("Email sent!")
-        print(req.json())
+        # print(req.json())
 
     except Exception as e:
         print(f"Failed to send email: {str(e)}")
@@ -72,7 +72,7 @@ def send_sms_notification(notification):
           body=message,
           to=RECEIVER_PHONE_NUMBER
         )
-        print(req.sid)
+        # print(req.sid)
 
         db.update_one(
             {"_id": notification['_id']},

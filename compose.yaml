@@ -1,16 +1,12 @@
 # Use root/example as user/password credentials
 
 services:
-  web:
+  flask-server:
     build: .
     ports:
       - "5050:5050"
     depends_on:
       - mongo
-    env_file:
-      - .env
-    environment:
-      MONGO_URI: mongodb://root:example@mongo:27017/notifications_db
 
   notification-worker:
     build: .
