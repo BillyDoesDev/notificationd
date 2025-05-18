@@ -98,7 +98,7 @@ def _handle_in_app(notification):
 
 def process_in_app_notifications():
     pending_notifications = db.find(
-        {"status": "pending", "notification_type": "in-app"}
+        {"status": {"$in": ["pending", "failed"]}, "notification_type": "in-app"}
     )
 
     for notification in pending_notifications:

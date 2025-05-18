@@ -89,7 +89,7 @@ def send_sms_notification(notification):
 
 # Notification Dispatcher
 def process_notifications():
-    pending_notifications = db.find({"status": "pending"})
+    pending_notifications = db.find({"status": {"$in": ["pending", "failed"]}})
 
     for notification in pending_notifications:
         notification_type = notification.get("notification_type")

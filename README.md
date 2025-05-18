@@ -45,18 +45,40 @@ Build a system to send notifications to users.
 > [!IMPORTANT]
 > Keep the `MONGO_URI` as is.
     
-    ```sh
-    MAILGUN_API_KEY="xxx"
-    MAILGUN_DOMAIN="xxx.mailgun.org"
-    REGISTERED_RECEIVER_EMAIL="John Doe <johndoe@email.com>"
+```sh
+MAILGUN_API_KEY="xxx"
+MAILGUN_DOMAIN="xxx.mailgun.org"
+REGISTERED_RECEIVER_EMAIL="John Doe <johndoe@email.com>"
 
-    TWILIO_SID="xxx"
-    TWILIO_AUTH_TOKEN="xxx"
-    TWILIO_PHONE_NUMBER="+1xxx"
-    RECEIVER_PHONE_NUMBER="xxx"
+TWILIO_SID="xxx"
+TWILIO_AUTH_TOKEN="xxx"
+TWILIO_PHONE_NUMBER="+1xxx"
+RECEIVER_PHONE_NUMBER="xxx"
 
-    MONGO_URI="mongodb://root:example@mongo:27017/notifications_db?authSource=admin"
-    ```
+MONGO_URI="mongodb://root:example@mongo:27017/notifications_db?authSource=admin"
+```
+
+The directory structure should look something like this:
+```
+.
+├── compose.yaml
+├── Dockerfile
+├── .dockerignore
+├── .env
+├── .gitignore
+├── LICENSE
+├── main.py
+├── README.md
+├── requirements.txt
+├── scripts
+│   └── notification_worker.py
+├── static
+│   ├── css
+│   └── main.js
+└── templates
+    └── index.html
+```
+
 
 ## Execution and API details
 
