@@ -42,8 +42,8 @@ Build a system to send notifications to users.
     - Obtain a virtual phone number and your auth token from [their dashboard](https://console.twilio.com/us1/develop/sms/try-it-out/send-an-sms), and save these for later.
 
 - Create a `.env` file in the current directory. Its contents should have the following. Replace the fields as required.
-    > [!IMPORTANT]
-    > Keep the `MONGO_URI` as is.
+> [!IMPORTANT]
+> Keep the `MONGO_URI` as is.
     
     ```sh
     MAILGUN_API_KEY="xxx"
@@ -76,11 +76,14 @@ Build a system to send notifications to users.
     ```sh
     docker compose down
     ```
+> [!Tip]
+> If you do not make any changes to the files, to run this next time, you can simply do:
+> ```sh
+> docker compose up -d
+> ```
+> This does not rebuild the containers each time.
 
-    > [!Tip]
-    > If you do not make any changes to the files, to run this next time, you can simply do:
-    > `docker compose up -d`. This does not rebuild the containers each time.
-
+---
 
 ### API Documentation
 
