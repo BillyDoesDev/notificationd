@@ -8,40 +8,53 @@
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
     integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
     crossorigin="anonymous"></script>
-  <!-- <script src="{{ url_for('static', filename='socket.io.js') }}"></script> -->
-  <script defer src="{{ url_for('static', filename='main.js') }}"></script>
+  <!-- <script defer src="../static/socket.io.js.js"></script> -->
+  <script defer src="../static/main.js"></script>
+  <link rel="stylesheet" href="../static/css/style.css">
 </head>
 
 <body>
 
   <h1>Notification Service - Test Client</h1>
 
-  <h2>Get Notifications</h2>
-  <form method="GET" onsubmit="event.preventDefault(); fetchNotifications();">
-    <label for="userId">User ID:</label>
-    <input type="number" id="userId" name="userId" required>
-    <button type="submit">Get Notifications</button>
-  </form>
+  <div class="alert-success">This is a success message!</div>
 
-  <div id="notifications"></div>
+  <div class="get-notif">
+    <h2>Get Notifications</h2>
+    <form method="GET" onsubmit="event.preventDefault(); fetchNotifications();">
+      <label for="userId">User ID:</label>
+      <input type="number" id="userId" name="userId" required>
+      <button type="submit">Get Notifications</button>
+    </form>
 
-  <h2>Send Notification</h2>
-  <form method="POST" onsubmit="event.preventDefault(); sendNotification();">
-    <label for="userIdSend">User ID:</label>
-    <input type="number" id="userIdSend" name="userIdSend" required><br>
+    <div id="notifications">
+      Notifications:
+    </div>
+  </div>
+  <hr>
+  <div class="send-notif">
+    <h2>Send Notification</h2>
+    <form method="POST" onsubmit="event.preventDefault(); sendNotification();">
+      <label for="userIdSend">User ID:</label>
+      <input type="number" id="userIdSend" name="userIdSend" required><br>
 
-    <label for="type">Notification Type:</label>
-    <select id="type" name="type">
-      <option value="email">Email</option>
-      <option value="sms">SMS</option>
-      <option value="in-app">In-App</option>
-    </select><br>
+      <label for="type">Notification Type:</label>
+      <select id="type" name="type">
+        <option value="email">Email</option>
+        <option value="sms">SMS</option>
+        <option value="in-app">In-App</option>
+      </select><br>
 
-    <label for="content">Content:</label>
-    <input type="text" id="content" name="content" required><br>
+      <label for="content">Content:</label>
+      <input type="text" id="content" name="content" required><br>
 
-    <button type="submit">Send Notification</button>
-  </form>
+      <button type="submit">Send Notification</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>Made with with care, by Dhrubajyoti Mandal (C) 2025</p>
+  </footer>
 
 </body>
 

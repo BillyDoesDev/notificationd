@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+* {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #cdd6f4;
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #11111b;
+}
+
+hr {
+    border: solid #1e1e2e 1px;
+    width: 80%;
+}
+
+h1 {
+    padding: 2rem;
+}
+
+h2 {
+    padding: 1rem;
+}
+
+button {
+    cursor: pointer;
+    background-color: #cdd6f4;
+    opacity: 70%;
+    color: #11111b;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    transition: opacity ease-in-out 0.2s;
+}
+
+button:hover {
+    opacity: 100%;
+}
+
+.get-notif,
+.send-notif {
+    width: 75%;
+    max-width: 500px;
+    display: grid;
+    place-items: center;
+}
+
+form,
+#notifications {
+    width: 100%;
+    background-color: #1e1e2e;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+#notifications {
+    background-color: #1e1e2e82;
+    margin: 1.5rem;
+}
+
+#notifications>p {
+    padding-left: 1rem;
+    border-left: solid #34344d 2px;
+}
+
+input,
+select {
+    background-color: #34344d;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+
+}
+
+.alert-success {
+    opacity: 0;
+    transition: opacity 0.5s;
+    background-color: rgb(7, 102, 7);
+    padding: 0.5rem;
+    border-radius: 0.2rem;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+}
+
+.alert-success.show {
+    opacity: 1;
+}
+
+
+footer {
+    height: 100%;
+    width: 100%;
+    margin-top: 1rem;
+    font-size: small;
+    display: grid;
+    place-items: end;
+}
+
+footer > p {
+    background-color: black;
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem;
+}

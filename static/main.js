@@ -5,16 +5,26 @@ socket.on("connect", () => {
     console.log("WebSocket connected");
 });
 
-socket.on("notification", (data) => {
-    console.log("got in-app notification");
-    console.log(data);
-});
-
-
 socket.on("check-in-app", (data) => {
     console.log("[requesting app notif now]");
     socket.emit('request-notif', data);
 });
+
+const alertDiv = document.querySelector(".alert-success");
+socket.on("notification", (data) => {
+    console.log("got in-app notification");
+    console.log(data);
+    if (alertDiv) {
+        alertDiv.textContent = data["message"]
+        alertDiv.classList.add("show");
+
+        setTimeout(() => {
+            alertDiv.classList.remove("show");
+        }, 4500); // 500ms fadeIn + 4000ms delay
+    }
+});
+
+
 
 async function fetchNotifications() {
     const userId = document.getElementById('userId').value;
@@ -25,13 +35,14 @@ async function fetchNotifications() {
         notificationsDiv.innerHTML = `<h3>Notifications for User ${userId}:</h3>`;
         if (data.data) {
             data.data.forEach(notif => {
-                notificationsDiv.innerHTML += `<p>${notif.content} - Status: ${notif.status}</p>`;
+                notificationsDiv.innerHTML += `<p>${notif.content} - <b>Status: ${notif.status}</b></p>`;
             });
         } else {
             notificationsDiv.innerHTML += `<p>No notifications found.</p>`;
         }
     } catch (err) {
         console.error('Error fetching notifications:', err);
+        notificationsDiv.innerHTML += `<p>Server Error.</p>`;
     }
 }
 
