@@ -60,15 +60,19 @@ def rabbitmq_consumer():
         try:
             if notification_type == "email": notif.send_email_notification(notification=message)
             elif notification_type == "sms": notif.send_sms_notification(notification=message)
-            else:
+            elif notification_type == "in-app":
+                # for i in range(2):
+                #     print(f"🐊 round {i+1}...")
                 # try:
                     notif.db.update_one(
                         {"_id": ObjectId(message["_id"])},
                         {"$set": {"status": "sent", "timestamp": datetime.now()}},
                     )
 
-                    socketio.emit("notification", {"message": message["content"]})
-                    print("In-app notification sent!")
+                    socketio.emit("notification", {"message": message["content"], "id": message["_id"]})
+                    # socketio.emit("notification", {"message": message["content"], "id": message["_id"]})
+                    print("🐋 emited")
+                    print("🐙 In-app notification sent!")
             ch.basic_ack(delivery_tag=method.delivery_tag)
         
         except Exception as e:

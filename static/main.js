@@ -11,16 +11,23 @@ socket.on("connect", () => {
 // });
 
 const alertDiv = document.querySelector(".alert-success");
+let prev_id = ""
 socket.on("notification", (data) => {
     console.log("got in-app notification");
     console.log(data);
-    if (alertDiv) {
-        alertDiv.textContent = data["message"]
-        alertDiv.classList.add("show");
 
-        setTimeout(() => {
-            alertDiv.classList.remove("show");
-        }, 4500); // 500ms fadeIn + 4000ms delay
+    if (data["id"] != prev_id) { // ie, you truly have a new message
+        // UPDATE: this check is redundant now
+        if (alertDiv) {
+            alertDiv.textContent = data["message"]
+            alertDiv.classList.add("show");
+    
+            setTimeout(() => {
+                alertDiv.classList.remove("show");
+            }, 4500); // 500ms fadeIn + 4000ms delay
+
+            prev_id = data["id"]
+        }
     }
 });
 
