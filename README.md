@@ -260,7 +260,7 @@ The following endpoints are available:
 
 
 > [!NOTE]
-> Previously, before `RabbitMQ` was implemented in this project, messages were polled at fixed intervals using `apscheduler`, by looking at database records.
+> Previously, before `RabbitMQ` was implemented in this project, messages were polled at fixed intervals using `apscheduler`, by looking at database records. You can browse that version of the project [here](https://github.com/BillyDoesDev/notificationd/tree/2af3b75b5968a360a5bdb140b457a8bf5527cb03). 
 
 
 ## License
