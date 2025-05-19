@@ -17,7 +17,7 @@ Build a system to send notifications to users.
     - Email, SMS, and in-app notifications.
 3. Bonus Points:<br>
     - Use a queue (e.g., RabbitMQ, Kafka) for processing notifications.
-    - Add retries for failed notifications.
+    - Add retries for failed notifications. (*unstable*)
 
 **Deliverables**
 1. A Git repository link containing:
