@@ -26,6 +26,10 @@ Build a system to send notifications to users.
 2. ~~(Optional) Link to the deployed application~~ or API documentation (if implemented).
 <hr>
 
+### Sample working demo
+![image](https://github.com/user-attachments/assets/f1736da5-7a98-466f-8fdb-dbf401ba9f72)
+
+
 ## Setup
 
 - Make sure you have [Docker](https://www.docker.com/) installed and running on your system.
