@@ -1,18 +1,15 @@
-#!/usr/bin/env python
-
-import os
-import sys
 import threading
+import sys
 import pika
-from flask import Flask
-from flask_socketio import SocketIO
-from flask_cors import CORS
-from datetime import datetime
-from dotenv import load_dotenv
+import os
 import notification_worker as notif
 import json
+from flask_socketio import SocketIO
+from flask_cors import CORS
+from flask import Flask
+from dotenv import load_dotenv
+from datetime import datetime
 from bson.objectid import ObjectId
-
 
 load_dotenv()
 RABBITMQ_QUEUE=os.getenv("RABBITMQ_QUEUE")
@@ -42,7 +39,6 @@ def setup_queues(channel):
         "x-message-ttl": RETRY_DELAY_MS,
     }
     channel.queue_declare(queue=RETRY_QUEUE, durable=True, arguments=args)
-    # channel.queue_declare(queue=RABBITMQ_QUEUE, durable=True)
     channel.queue_bind(exchange=RABBITMQ_EXCHANGE, queue=RABBITMQ_QUEUE)
 
 
@@ -61,18 +57,14 @@ def rabbitmq_consumer():
             if notification_type == "email": notif.send_email_notification(notification=message)
             elif notification_type == "sms": notif.send_sms_notification(notification=message)
             elif notification_type == "in-app":
-                # for i in range(2):
-                #     print(f"🐊 round {i+1}...")
-                # try:
-                    notif.db.update_one(
-                        {"_id": ObjectId(message["_id"])},
-                        {"$set": {"status": "sent", "timestamp": datetime.now()}},
-                    )
+                notif.db.update_one(
+                    {"_id": ObjectId(message["_id"])},
+                    {"$set": {"status": "sent", "timestamp": datetime.now()}},
+                )
 
-                    socketio.emit("notification", {"message": message["content"], "id": message["_id"]})
-                    # socketio.emit("notification", {"message": message["content"], "id": message["_id"]})
-                    print("🐋 emited")
-                    print("🐙 In-app notification sent!")
+                socketio.emit("notification", {"message": message["content"], "id": message["_id"]})
+                print("🐋 emited")
+                print("🐙 In-app notification sent!")
             ch.basic_ack(delivery_tag=method.delivery_tag)
         
         except Exception as e:

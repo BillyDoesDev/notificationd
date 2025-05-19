@@ -1,4 +1,6 @@
+import pika
 import os
+import json
 from pymongo.errors import PyMongoError
 from flask_socketio import SocketIO, emit
 from flask_pymongo import PyMongo
@@ -6,8 +8,6 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, render_template
 from dotenv import load_dotenv
 from datetime import datetime
-import pika
-import json
 
 load_dotenv()
 
@@ -27,7 +27,6 @@ channel.exchange_declare(
 channel.queue_declare(queue=RABBITMQ_QUEUE)
 
 app = Flask(__name__)
-# app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 app.config["MONGO_URI"] = "mongodb://root:example@localhost:27017/notifications_db?authSource=admin"
 
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -81,10 +80,9 @@ def post_user_notifications():
         payload["_id"] = inserted_id
 
         # send over to rabbitmq
-        print(payload)
-        channel.basic_publish(
-            exchange=RABBITMQ_EXCHANGE, routing_key=RABBITMQ_ROUTING_KEY, body=json.dumps(payload)
-        )
+        channel.basic_publish(exchange=RABBITMQ_EXCHANGE, routing_key=RABBITMQ_ROUTING_KEY, body=json.dumps(payload))
+        # hacky fix for in-app notifications, since it encounters race conditions, sometimes
+        if payload["notification_type"] == "in-app": channel.basic_publish(exchange=RABBITMQ_EXCHANGE, routing_key=RABBITMQ_ROUTING_KEY, body=json.dumps(payload))
 
         return jsonify(message="Notification queued", id=inserted_id), 201
 
@@ -97,7 +95,6 @@ def post_user_notifications():
 def handle_connect():
     print("Client connected")
     emit("message", "Connected to WebSocket server")
-
 
 
 

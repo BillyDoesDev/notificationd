@@ -5,11 +5,6 @@ socket.on("connect", () => {
     console.log("WebSocket connected");
 });
 
-// socket.on("check-in-app", (data) => {
-//     console.log("[requesting app notif now]");
-//     socket.emit('request-notif', data);
-// });
-
 const alertDiv = document.querySelector(".alert-success");
 let prev_id = ""
 socket.on("notification", (data) => {
@@ -17,7 +12,6 @@ socket.on("notification", (data) => {
     console.log(data);
 
     if (data["id"] != prev_id) { // ie, you truly have a new message
-        // UPDATE: this check is redundant now
         if (alertDiv) {
             alertDiv.textContent = data["message"]
             alertDiv.classList.add("show");
@@ -41,7 +35,7 @@ async function fetchNotifications() {
         notificationsDiv.innerHTML = `<h3>Notifications for User ${userId}:</h3>`;
         if (data.data) {
             data.data.forEach(notif => {
-                notificationsDiv.innerHTML += `<p>${notif.content} - <b>Status: ${notif.status}</b></p>`;
+                notificationsDiv.innerHTML += `<p>${notif.content} - <b>Status: ${notif.status}, Mode: ${notif.notification_type}</b></p>`;
             });
         } else {
             notificationsDiv.innerHTML += `<p>No notifications found.</p>`;
