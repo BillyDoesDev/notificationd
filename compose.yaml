@@ -1,19 +1,4 @@
-# Use root/example as user/password credentials
-
 services:
-  flask-server:
-    build: .
-    ports:
-      - "5050:5050"
-    depends_on:
-      - mongo
-
-  notification-worker:
-    build: .
-    depends_on:
-      - mongo
-    command: python -u scripts/notification_worker.py
-
   mongo:
     image: mongo
     ports:
@@ -35,6 +20,12 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+  
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - 5672:5672
+      - 15672:15672
 
 volumes:
   mongo_data:

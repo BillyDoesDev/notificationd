@@ -1,14 +1,14 @@
 // set up websockets
-const socket = io();
+const socket = io("http://localhost:5051/");
 
 socket.on("connect", () => {
     console.log("WebSocket connected");
 });
 
-socket.on("check-in-app", (data) => {
-    console.log("[requesting app notif now]");
-    socket.emit('request-notif', data);
-});
+// socket.on("check-in-app", (data) => {
+//     console.log("[requesting app notif now]");
+//     socket.emit('request-notif', data);
+// });
 
 const alertDiv = document.querySelector(".alert-success");
 socket.on("notification", (data) => {
@@ -23,7 +23,6 @@ socket.on("notification", (data) => {
         }, 4500); // 500ms fadeIn + 4000ms delay
     }
 });
-
 
 
 async function fetchNotifications() {

@@ -16,7 +16,7 @@ Build a system to send notifications to users.
 2. Notification Types:<br>
     - Email, SMS, and in-app notifications.
 3. Bonus Points:<br>
-    - ~~Use a queue (e.g., RabbitMQ, Kafka) for processing notifications.~~
+    - Use a queue (e.g., RabbitMQ, Kafka) for processing notifications.
     - Add retries for failed notifications.
 
 **Deliverables**
@@ -55,7 +55,9 @@ TWILIO_AUTH_TOKEN="xxx"
 TWILIO_PHONE_NUMBER="+1xxx"
 RECEIVER_PHONE_NUMBER="xxx"
 
-MONGO_URI="mongodb://root:example@mongo:27017/notifications_db?authSource=admin"
+RABBITMQ_QUEUE="hello"
+RABBITMQ_EXCHANGE="notification-exchange"
+RABBITMQ_ROUTING_KEY="hello"
 ```
 
 The directory structure should look something like this:
@@ -82,19 +84,32 @@ The directory structure should look something like this:
 
 ## Execution and API details
 
+- Create a python virtual environment, activate it and install the dependencies.
+    ```sh
+    python -m venv env
+    source env/bin/activate
+    # env\scripts\activate        # for Windows users
+
+    pip install -r requirements.txt
+    ```
 - Inside the project directory, run:
     ```sh
     docker compose up --build -d
     ```
-- This will start the docker container. Optionally, to view the logs of the web server, run:
+- This will start the docker container, which manages essential dependencies for the project. Once that's up, start up your python servers, one for the primary API endpoint, and the other for managing the `RabbitMQ` broker.
     ```sh
-    docker compose logs -f flask-server
+    python main.py
     ```
-- The API endpoints are live at `localhost:5050`. You can head over there in your browser to try out a web client for the API.
+    **And in a separate terminal:**
+    ```sh
+    python scripts/receive_v2.py
+    ```
+
+- The API endpoints are live at `http://localhost:5050`. You can head over there in your browser to try out a web client for the API.
 
 - To access a GUI to the database, you can head over to `http://localhost:8081` to access the `mongo-express` dashboard for the MongoDB database.
 
-- To shut the server down, simply run:
+- To shut the server down, simply run the following, and kill the python processes:
     ```sh
     docker compose down
     ```
@@ -231,7 +246,8 @@ The following endpoints are available:
 
 - This app runs in a `python-flask` server, and uses `MongoDB` to store user notifications. The entire setup is dockerised, to provide a seamless deployment experience, and also to allow room for scalability.
 - In-app updates are managed via `websockets`, using `socket.io`, on both the client and the server.
-- SMS and Email updates are handled via a [`notification-worker`](https://github.com/BillyDoesDev/notificationd/blob/main/scripts/notification_worker.py) process, which uses `apscheduler` to poll notifications every `10s`, and send them as required.
+- SMS and Email updates are handled via [`RabbitMQ`](https://www.rabbitmq.com/), which serves as a message broker, to deliver notifications gracefully, and handle large workloads.
+    - Essentially, when a new `POST` request is sent, RabbitMQ comes into action, via the `scripts/receive_v2.py` script, which manages a suitable exchange to deliver messages, along with separate queues, to deal with successful and failed attempts. As of wriring this, the `retry` feature is a bit unreliable.
 - `MailGun` and `Twilio` are used to send email and SMS updates, respectively.
 
 
@@ -241,6 +257,10 @@ The following endpoints are available:
 > curl -O https://raw.githubusercontent.com/BillyDoesDev/blueberry/refs/heads/main/> static/socket.io.js
 > ```
 > And then simply link that to your `index.html` 
+
+
+> [!NOTE]
+> Previously, before `RabbitMQ` was implemented in this project, messages were polled at fixed intervals using `apscheduler`, by looking at database records.
 
 
 ## License
